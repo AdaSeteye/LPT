@@ -232,7 +232,7 @@ public class BisokeLPT {
 
     private static String getUserInfoFromScript(String email, String password) {
         try {
-            // Update the path to point to the .bat script
+
             ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "./user_retriever.bat", email, password);
             pb.redirectErrorStream(true);
             Process process = pb.start();

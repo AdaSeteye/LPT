@@ -2,12 +2,12 @@ package sip.bisoke.one.models;
 
 public abstract class User {
 
-    private final String uuid;
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String password;
-    private final String role;
+    protected final String uuid;
+    protected final String firstName;
+    protected final String lastName;
+    protected final String email;
+    protected final String password;
+    protected final String role;
 
     /// --- Constructor --- ///
     public User(String uuid, String firstName, String lastName, String email, String password, String role) {
@@ -43,5 +43,8 @@ public abstract class User {
     public String getRole() {
         return role;
     }
+
+    /// --- Abstract Methods --- ///
+    public abstract void showMenu();
 
 }

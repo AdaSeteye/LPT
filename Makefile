@@ -1,5 +1,5 @@
 compile:
 	@echo "Compiling..."
-	javac -d bin src/*.java
+	javac -d bin sip/bisoke/one/*.java  
 	@echo "Compilation complete."
 	

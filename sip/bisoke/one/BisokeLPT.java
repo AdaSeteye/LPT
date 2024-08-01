@@ -205,6 +205,7 @@ public class BisokeLPT {
         String password = scanner.nextLine();
 
         String userInfo = getUserInfoFromScript(email, password);
+        System.out.println("USER DATA: " + userInfo);
 
         if ("not_found".equalsIgnoreCase(userInfo.trim())) {
             System.out.println("Authentication failed.");
@@ -229,21 +230,41 @@ public class BisokeLPT {
         }
     }
 
+    private static String getUserInfoFromScript(String email, String password) {
+        try {
+            // Update the path to point to the .bat script
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "./user_retriever.bat", email, password);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            System.out.println(output.toString());
+            return output.toString().trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // private static String getUserInfoFromScript(String email, String password) {
     //     try {
     //         ProcessBuilder pb = new ProcessBuilder("/path/to/retrieve_user_info.sh", email, password);
     //         pb.redirectErrorStream(true);
     //         Process process = pb.start();
-
     //         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
     //         StringBuilder output = new StringBuilder();
-
     //         String line;
     //         while ((line = reader.readLine()) != null) {
     //             output.append(line).append("\n");
     //         }
-
     //         process.waitFor();
     //         return output.toString().trim();
     //     } catch (Exception e) {
@@ -251,7 +272,6 @@ public class BisokeLPT {
     //         return null;
     //     }
     // }
-
     private static String getUserRole(String email, String password) {
         // TODO: Implement a real authentication mechanism
         // For now, we'll just use a dummy check

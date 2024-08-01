@@ -1,17 +1,38 @@
-# Parameters
-EMAIL=$1
-PASSWORD=$2
 
-# File containing user data
-DATABASE_FILE="user_store.txt"
 
-# Search for user in the database file
-USER_INFO=$(grep -P "^([^,]+,){1}${EMAIL},([^,]*,){1}${PASSWORD}," $DATABASE_FILE)
+# Path to the TXT file that acts as a database
+DATABASE_FILE="C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_store.txt"
 
-# Check if user exists
-if [ -n "$USER_INFO" ]; then
-    # Print the user info
-    echo "$USER_INFO"
-else
-    echo "not_found"
+# Function to search for an email in the input file and print the line if found
+search_email() {
+    local email="$1"
+    local password="$2"
+
+    # Check if file exists
+    if [ ! -f "$DATABASE_FILE" ]; then
+        echo "Database file does not exist at $DATABASE_FILE"
+        exit 1
+    fi
+
+    # Search for the email in the input file
+    local result=$(grep -i "$email" "$DATABASE_FILE")
+
+    if [ -n "$result" ]; then
+        echo "Found: $result"
+    else
+        echo "No match found for email: $email"
+    fi
+}
+
+# Ensure the script is run with required arguments
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <email> <password>"
+    exit 1
 fi
+
+# Read the email and password from arguments
+EMAIL="$1"
+PASSWORD="$2"
+
+# Call the function to search for the email
+search_email "$EMAIL" "$PASSWORD"

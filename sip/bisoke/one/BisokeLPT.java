@@ -1,12 +1,13 @@
 package sip.bisoke.one;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Scanner;
 
-import sip.bisoke.one.models.Admin;
-
+//import sip.bisoke.one.models.Admin;
 /// --- Models --- ///
 // TODO: Move these classes to separate files in the sip.bisoke.one.models package
 
@@ -233,6 +234,37 @@ public class BisokeLPT {
         }
     }
 
+    /// --- ADMIN FUNCTION TO INITIATE REGISTRATION --- ///
+    private static void initiateRegistration() {
+        try {
+            Utils utils = new Utils();
+            utils.showLogo();
+            utils.showDivider("-");
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("""
+        **__INITIATE USER REGISTRATION---***
+        """);
+            System.out.print("-- Please enter the user's email >_ ");
+            String email = scanner.nextLine();
+            String path = getCleanPath("register_user.bat");
+
+            // URL path = ActiveDirectoryQuery.class.getResource("relative/path/to/EmailFQDN.exe");
+            // "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/register_user.sh";
+            // Call the bash script to initiate registration
+            String feedback = registerUserWithProcessCall(path.replace("\\", "/"), email);
+            System.out.println(feedback);
+        } catch (Exception e) {
+            System.out.println("Could not initiate registration");
+        }
+    }
+
+    private static String getCleanPath(String fileName) throws IOException {
+        String path = new File(fileName).getCanonicalPath();
+        return path;
+    }
+
+    /// --- ADMIN FUNCTION TO EXPORT USER DATA --- ///
+
     private static String getUserInfoFromScript(String email, String password) {
         try {
 
@@ -280,6 +312,32 @@ public class BisokeLPT {
         }
     }
 
+    private static String registerUserWithProcessCall(String filePath, String email) {
+        try {
+            String currentDir = System.getProperty("user.dir");
+            String command = "bash " + filePath + " " + email;
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.directory(new File(currentDir)); // Set the working directory
+
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            System.out.println("OUUUT: " + output.toString());
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
     private static void handleDataExport() {
         try {
             runProcess("C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/csv_exporter.bat");
@@ -289,28 +347,10 @@ public class BisokeLPT {
         }
     }
 
-    // private static String getUserInfoFromScript(String email, String password) {
-    //     try {
-    //         ProcessBuilder pb = new ProcessBuilder("/path/to/retrieve_user_info.sh", email, password);
-    //         pb.redirectErrorStream(true);
-    //         Process process = pb.start();
-    //         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    //         StringBuilder output = new StringBuilder();
-    //         String line;
-    //         while ((line = reader.readLine()) != null) {
-    //             output.append(line).append("\n");
-    //         }
-    //         process.waitFor();
-    //         return output.toString().trim();
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return null;
-    //     }
-    // }
     private static void handleAdminChoice(int choice, Admin admin) {
         switch (choice) {
             case 1:
-                System.out.println("Managing users...");
+                initiateRegistration();
                 break;
             case 2:
                 handleDataExport();

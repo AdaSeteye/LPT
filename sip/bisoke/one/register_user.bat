@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 :: Path to the file that acts as the user store
 set "file_path=C:\Users\STUDENT\Desktop\LPT\sip\bisoke\one\user_store.txt"
-echo HERE WE ARE, THE SCRIPT IS EXECUTING
+::echo HERE WE ARE, THE SCRIPT IS EXECUTING
 
 :: Function to generate a UUID (using Windows PowerShell)
 for /f "delims=" %%i in ('powershell -Command "[guid]::NewGuid().ToString()"') do set "uuid=%%i"

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Scanner;
 
 //import sip.bisoke.one.models.Admin;
@@ -167,7 +166,7 @@ class Patient extends User {
     }
 
     public void showDivider(String token) {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             System.out.print(token);
 
         }
@@ -181,25 +180,99 @@ public class BisokeLPT {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        User user = authenticate(scanner);
 
         while (true) {
-            user.showMenu();
-            System.out.print("---Select an Option >_ ");
+            showMainMenu();
+            System.out.print("--- Select an Option >_ ");
             int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline left-over
 
-            if (user instanceof Admin) {
-                handleAdminChoice(choice, (Admin) user);
-            } else if (user instanceof Patient) {
-                handlePatientChoice(choice, (Patient) user);
+            switch (choice) {
+                case 1:
+                    completeRegistration();
+                    break;
+                case 2:
+                    User user = authenticate(scanner);
+                    if (user == null) {
+                        System.out.println("Authentication failed.");
+                        continue; // Restart the menu if authentication fails
+                    }
+                    while (true) {
+                        user.showMenu();
+                        System.out.print("--- Select an Option >_ ");
+                        int userChoice = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline left-over
+
+                        if (user instanceof Admin) {
+                            handleAdminChoice(userChoice, (Admin) user);
+                        } else if (user instanceof Patient) {
+                            handlePatientChoice(userChoice, (Patient) user);
+                        }
+                    }
+                default:
+                    System.out.println("Invalid option. Please try again.");
             }
         }
     }
 
-    private static User authenticate(Scanner scanner) {
+    private static void showMainMenu() {
         Utils utils = new Utils();
         utils.showLogo();
         utils.showDivider("-");
+        System.out.println("1. Complete Registration");
+        System.out.println("2. Login \n");
+    }
+
+    private static void completeRegistration() {
+        Scanner scanner = new Scanner(System.in);
+        // Implementation for completing registration
+        System.out.println("We need Your information to proceed...");
+
+        String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.bat";
+        System.out.print("-- Please enter your uuid >_ ");
+        String uuid = scanner.nextLine();
+
+        System.out.print("-- Please enter your email >_ ");
+        String email = scanner.nextLine();
+
+        String checkUser = checkUserwithProcess(path, email, uuid);
+
+        if (checkUser.contains("not_found")) {
+            System.out.println("\n User not found, please register first.\n ");
+
+        } else {
+            System.out.println("User with UUID" + uuid + "found! Let's proceed...");
+            System.out.print("-- Please enter your first name >_ ");
+            String firstName = scanner.nextLine();
+            System.out.print("-- Please enter your last name >_ ");
+            String lastName = scanner.nextLine();
+
+            System.out.print("-- Please enter your password >_ ");
+            String password = scanner.nextLine();
+
+            System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
+            String dateOfBirth = scanner.nextLine();
+
+            System.out.print("-- Are you HIV positive? (true/false) >_ ");
+            String hivStatus = scanner.nextLine();
+
+            System.out.print("-- Please enter your diagnosis date (yyyy-mm-dd) >_ ");
+            String diagnosisDate = scanner.nextLine();
+
+            System.out.print("-- Are you on ART? (true/false) >_ ");
+            String onART = scanner.nextLine();
+            System.out.print("-- What is your country ISO? >_ ");
+            String country = scanner.nextLine();
+
+            System.out.print("-- When did you started ART? (yyyy-mm-dd) >_ ");
+            String artYear = scanner.nextLine();
+
+            completeRegistrationWithProcessCall(path, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
+        }
+    }
+
+    private static User authenticate(Scanner scanner) {
+
         System.out.println("""
         *** Welcome, We need to authenticate you first! ***
         """);
@@ -246,10 +319,10 @@ public class BisokeLPT {
         """);
             System.out.print("-- Please enter the user's email >_ ");
             String email = scanner.nextLine();
-            String path = getCleanPath("register_user.bat");
+            //   String path = getCleanPath("register_user.bat");
 
             // URL path = ActiveDirectoryQuery.class.getResource("relative/path/to/EmailFQDN.exe");
-            // "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/register_user.sh";
+            String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/register_user.bat";
             // Call the bash script to initiate registration
             String feedback = registerUserWithProcessCall(path.replace("\\", "/"), email);
             System.out.println(feedback);
@@ -258,11 +331,10 @@ public class BisokeLPT {
         }
     }
 
-    private static String getCleanPath(String fileName) throws IOException {
-        String path = new File(fileName).getCanonicalPath();
-        return path;
-    }
-
+    // private static String getCleanPath(String fileName) throws IOException {
+    //     String path = new File(fileName).getCanonicalPath();
+    //     return path;
+    // }
     /// --- ADMIN FUNCTION TO EXPORT USER DATA --- ///
 
     private static String getUserInfoFromScript(String email, String password) {
@@ -312,12 +384,61 @@ public class BisokeLPT {
         }
     }
 
+    private static String completeRegistrationWithProcessCall(String filePath, String email, String uuid, String password, String fname, String lname, String dob, String hivStatus, String diagnosisDate, String onART, String artStartDate, String countryISOCode) {
+        try {
+
+            // Create ProcessBuilder instance
+            ProcessBuilder pb = new ProcessBuilder(
+                    "cmd.exe", "/c", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate
+            );
+
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            System.out.println("OUUUT: " + output.toString());
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    private static String checkUserwithProcess(String path, String email, String uuid) {
+        try {
+
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", path, email, uuid);
+
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
     private static String registerUserWithProcessCall(String filePath, String email) {
         try {
-            String currentDir = System.getProperty("user.dir");
-            String command = "bash " + filePath + " " + email;
-            ProcessBuilder pb = new ProcessBuilder(command);
-            pb.directory(new File(currentDir)); // Set the working directory
+
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", filePath, email);
 
             pb.redirectErrorStream(true);
             Process process = pb.start();

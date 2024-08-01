@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 :: Path to the file that acts as the user store
 set "file_path=C:\Users\STUDENT\Desktop\LPT\sip\bisoke\one\user_store.txt"
 
-:: Function to generate a hashed password using PowerShell
+
 :hash_password
 setlocal
 set "password=%~1"
@@ -25,7 +25,7 @@ set "Diagnosisyear=%9"
 set "ARTStatus=%10"
 set "ARTyear=%11"
 
-:: Check if the user exists in the file
+:: We Check if the user exists in the file
 findstr /C:"%uuid%,%email%" "%file_path%" >nul
 if %errorlevel% neq 0 (
     echo invalid UUID or email. Registration failed.

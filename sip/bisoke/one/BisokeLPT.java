@@ -1,8 +1,11 @@
 package sip.bisoke.one;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+
+import sip.bisoke.one.models.Admin;
 
 /// --- Models --- ///
 // TODO: Move these classes to separate files in the sip.bisoke.one.models package
@@ -66,7 +69,7 @@ class Admin extends User {
     @Override
     public void showMenu() {
         System.out.println("------------------------------------------------------------");
-        System.out.println("1. Manage Users");
+        System.out.println("1. Initiate Registration");
         System.out.println("2. Export User Data");
         System.out.println("3. Export Analytics Data");
         System.out.println("4. Logout");
@@ -120,7 +123,7 @@ class Patient extends User {
 
     @Override
     public void showMenu() {
-        System.out.println("------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------");
         System.out.println("Hello, " + getUsername());
 
         System.out.println("1. View Profile");
@@ -181,7 +184,7 @@ public class BisokeLPT {
 
         while (true) {
             user.showMenu();
-            System.out.print("> Select an Option: ");
+            System.out.print("---Select an Option >_ ");
             int choice = scanner.nextInt();
 
             if (user instanceof Admin) {
@@ -212,17 +215,17 @@ public class BisokeLPT {
             return null;
         }
 
-        // Split the user info into fields
-        String[] fields = userInfo.split(",");
+        // Split the user info into fields and get each string individually
+        String[] fields = userInfo.split(", ");
 
-        // Extract user role from the fields
-        String role = fields[5]; // Assuming role is the 6th field
+        // Here we Extract user role from the fields
+        String role = fields[5];
 
         if ("admin".equalsIgnoreCase(role)) {
-            return new Admin(fields[0], fields[2], fields[3], fields[1], password, role);
+            return new Admin(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
         } else if ("patient".equalsIgnoreCase(role)) {
-            return new Patient(fields[0], fields[2], fields[3], fields[1], password, role,
-                    fields[6], Boolean.parseBoolean(fields[7]), fields[8],
+            return new Patient(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6],
+                    Boolean.parseBoolean(fields[7]), fields[8],
                     Boolean.parseBoolean(fields[9]), fields[10], fields[11]);
         } else {
             System.out.println("Unknown role.");
@@ -233,7 +236,8 @@ public class BisokeLPT {
     private static String getUserInfoFromScript(String email, String password) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "./user_retriever.bat", email, password);
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_retriever.bat", email, password
+            );
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
@@ -248,9 +252,40 @@ public class BisokeLPT {
             process.waitFor();
             System.out.println(output.toString());
             return output.toString().trim();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException e) {
             return null;
+        }
+    }
+
+    private static String runProcess(String filePath) {
+        try {
+
+            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", filePath);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            System.out.println(output.toString());
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    private static void handleDataExport() {
+        try {
+            runProcess("C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/csv_exporter.bat");
+            System.out.println("Data saved in Downloads Directory");
+        } catch (Exception e) {
+            System.out.println("Could not export Data");
         }
     }
 
@@ -272,23 +307,13 @@ public class BisokeLPT {
     //         return null;
     //     }
     // }
-    private static String getUserRole(String email, String password) {
-        // TODO: Implement a real authentication mechanism
-        // For now, we'll just use a dummy check
-        if ("admin@bisoke.com".equalsIgnoreCase(email)) {
-            return "admin";
-        } else {
-            return "patient";
-        }
-    }
-
     private static void handleAdminChoice(int choice, Admin admin) {
         switch (choice) {
             case 1:
                 System.out.println("Managing users...");
                 break;
             case 2:
-                System.out.println("Exporting user data...");
+                handleDataExport();
                 break;
             case 3:
                 System.out.println("Exporting analytics data...");

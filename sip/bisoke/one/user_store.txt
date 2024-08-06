@@ -1,5 +1,2 @@
-4ec8c09c-1329-4c1e-b59b-964df61ef69b, Baimam, Boukar, baimamboukar@gmail.com, password, admin
+4ec8c09c-1329-4c1e-b59b-964df61ef69b,Baimam,Boukar,baimamboukar@gmail.com,password,admin
 9ec8c09c-c329-4c1e-b5cb-964de61ef69b, Alvina, Minja, aminja@gmail.com, password, patient, 2009-05-10, true, 2015-08-12, false, 1997-08-10, TZ
-9ec8c09c-1329-4c1e-b59b-964de61ef69b, user.magic@pass.com, patient
-55f5aeb6-1d1f-4441-a0e2-b19e4fdcdc4f, alpha.user@lpt.com, patient
-2f7403db-4773-4838-a9d7-c774bc14389d, first.user@lpt.com, patient

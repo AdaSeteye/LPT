@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.Scanner;
+import static sip.bisoke.one.BisokeLPT.updateUserProfileWithProcess;
 
 //import sip.bisoke.one.models.Admin;
 /// --- Models --- ///
@@ -127,23 +129,84 @@ class Patient extends User {
         System.out.println("Hello, " + getUsername());
 
         System.out.println("1. View Profile");
-        System.out.println("2. Edit Profile");
+        System.out.println("2. Update Profile");
         System.out.println("3. Logout");
     }
 
-    public void viewProfile() {
-        System.out.println("Profile Information:");
-        // System.out.println("Identifier: " + this.getU());
-        System.out.println("Name: " + this.getFirstName() + " " + getLastName());
-        System.out.println("Email: " + getEmail());
-        System.out.println("Date of Birth: " + dateOfBirth);
-        System.out.println("HIV Positive: " + this.hivStatus);
-        System.out.println("Diagnosis Date: " + (diagnosisDate != null ? diagnosisDate : "N/A"));
-        System.out.println("On ART: " + this.onART);
-        System.out.println("ART Start Date: " + (artStartDate != null ? artStartDate : "N/A"));
-        System.out.println("Country ISO Code: " + countryISOCode);
-        System.out.println("Computed Lifespan: 34 Years");
+    public String getUserProfileSummary() {
+        String diagnosisDateText = (diagnosisDate != null ? diagnosisDate : "N/A");
+        String artStartDateText = (artStartDate != null ? artStartDate : "N/A");
 
+        return String.format(
+                "User Profile: %s %s (Email: %s) was born on %s, diagnosed HIV positive on %s, and started ART on %s. Current status: On ART: %s, Country: %s. Computed Lifespan: 34 Years.",
+                getFirstName(),
+                getLastName(),
+                getEmail(),
+                dateOfBirth,
+                diagnosisDateText,
+                artStartDateText,
+                onART,
+                countryISOCode
+        );
+    }
+
+    public void showProfile() {
+
+        System.out.println("--------------| USER PROFILE |--------------");
+        System.out.println(">-Name: " + this.getFirstName() + " " + getLastName());
+        System.out.println(">-Email: " + getEmail());
+        System.out.println(">-Date of Birth: " + dateOfBirth);
+        System.out.println(">-HIV Positive: " + this.hivStatus);
+        System.out.println(">-Diagnosis Date: " + (diagnosisDate != null ? diagnosisDate : "N/A"));
+        System.out.println(">-On ART: " + this.onART);
+        System.out.println(">-ART Start Date: " + (artStartDate != null ? artStartDate : "N/A"));
+        System.out.println(">-Country ISO Code: " + countryISOCode);
+        System.out.println(">-Computed Lifespan: 34 Years");
+        System.out.println(getUserProfileSummary());
+
+    }
+
+    public void updateProfile() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("---- | PROFILE UPDATE | ----");
+            System.out.print("-- Please enter your email >_ ");
+            String email = scanner.nextLine();
+
+            System.out.print("-- Enter new first name >_ ");
+            String firstName = scanner.nextLine();
+
+            System.out.print("-- Enter new last name >_ ");
+            String lastName = scanner.nextLine();
+
+            System.out.print("-- Enter new password >_ ");
+            String password = scanner.nextLine();
+
+            System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
+            String dateOfBirth = scanner.nextLine();
+
+            System.out.print("-- Are you HIV positive? (true/false) >_ ");
+            String HIVStatus = scanner.nextLine();
+
+            System.out.print("-- Please enter your diagnosis date (yyyy-mm-dd) >_ ");
+            String diagnosisDate = scanner.nextLine();
+
+            System.out.print("-- Are you on ART? (true/false) >_ ");
+            String onART = scanner.nextLine();
+
+            System.out.print("-- What is your country ISO? >_ ");
+            String country = scanner.nextLine();
+
+            System.out.print("-- When did you start ART? (yyyy-mm-dd) >_ ");
+            String artYear = scanner.nextLine();
+
+            String result = updateUserProfileWithProcess(email, this.getUuid(), password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear);
+
+            if (result != null) {
+                System.out.println("Profile update result: " + result);
+            } else {
+                System.out.println("An error occurred during profile update.");
+            }
+        }
     }
 }
 
@@ -228,7 +291,8 @@ public class BisokeLPT {
         // Implementation for completing registration
         System.out.println("We need Your information to proceed...");
 
-        String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.bat";
+        String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.sh";
+        String completePath = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/complete_registration.sh";
         System.out.print("-- Please enter your uuid >_ ");
         String uuid = scanner.nextLine();
 
@@ -241,7 +305,7 @@ public class BisokeLPT {
             System.out.println("\n User not found, please register first.\n ");
 
         } else {
-            System.out.println("User with UUID" + uuid + "found! Let's proceed...");
+            System.out.println("User with UUID " + uuid + " found! Let's proceed...");
             System.out.print("-- Please enter your first name >_ ");
             String firstName = scanner.nextLine();
             System.out.print("-- Please enter your last name >_ ");
@@ -267,7 +331,7 @@ public class BisokeLPT {
             System.out.print("-- When did you started ART? (yyyy-mm-dd) >_ ");
             String artYear = scanner.nextLine();
 
-            completeRegistrationWithProcessCall(path, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
+            completeRegistrationWithProcessCall(completePath, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
         }
     }
 
@@ -389,9 +453,43 @@ public class BisokeLPT {
 
             // Create ProcessBuilder instance
             ProcessBuilder pb = new ProcessBuilder(
-                    "cmd.exe", "/c", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate
+                    "sh", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate
             );
 
+            pb.redirectErrorStream(true);
+            pb.directory(new File("./"));
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    public String getSystemPath(String relativePath) {
+        return "";
+    }
+
+    public static String updateUserProfileWithProcess(String email, String uuid, String password, String firstName, String lastName, String dateOfBirth, String country, String HIVStatus, String diagnosisDate, String onART, String artYear) {
+        try {
+            String path = Paths.get(System.getProperty("user.dir"), "io/update_profile.sh").toString();
+            String[] command = {
+                "bash",
+                "-c",
+                path + " " + email + " " + uuid + " " + password + " " + firstName + " " + lastName + " " + dateOfBirth + " " + country + " " + HIVStatus + " " + diagnosisDate + " " + onART + " " + artYear
+            };
+
+            ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
@@ -404,7 +502,6 @@ public class BisokeLPT {
             }
 
             process.waitFor();
-            System.out.println("OUUUT: " + output.toString());
             return output.toString().trim();
         } catch (IOException | InterruptedException e) {
             return null;
@@ -490,17 +587,15 @@ public class BisokeLPT {
 
     private static void handlePatientChoice(int choice, Patient patient) {
         switch (choice) {
-            case 1:
-                System.out.println("Viewing profile...");
-                break;
-            case 2:
-                System.out.println("Editing profile...");
-                break;
-            case 3:
+            case 1 ->
+                patient.showProfile();
+            case 2 ->
+                patient.updateProfile();
+            case 3 -> {
                 System.out.println("Logging out...");
                 System.exit(0);
-                break;
-            default:
+            }
+            default ->
                 System.out.println("Invalid option.");
         }
     }

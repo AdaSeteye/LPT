@@ -1,2 +1,0 @@
-,user@magic.com, PATIENT
-,alvina@bash.dev, PATIENT

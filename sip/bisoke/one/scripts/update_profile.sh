@@ -3,27 +3,37 @@ file_path="user_store.txt"
 # Parameters passed to the script
 email="$1"
 uuid="$2"
-fname="$3"
-lname="$4"
-ybirth="$5"
-country="$6"
-HIVStatus="$7"
-Diagnosisyear="$8"
-ARTStatus="$9"
-ARTyear="${10}"
+password="$3"
+fname="$4"
+lname="$5"
+ybirth="$6"
+country="$7"
+HIVStatus="$8"
+Diagnosisyear="$9"
+ARTStatus="${10}"
+ARTyear="${11}"
+role="${12}"
+# print all args
+echo "ALL ARGS: $@"
+echo "THIS IS THE USER'S UUID: $uuid"
+# Enable debugging to trace the script's execution
+set -x
 
 # Check if the user exists in the file
-if ! grep -q "${uuid},${email}" "$file_path"; then
-    echo "Invalid UUID or email. Update failed."
+if ! grep -q "^${uuid}" "$file_path"; then
+    echo "Invalid UUID. Update failed."
     exit 1
 fi
 
 # Prepare the new details
-new_details="${uuid},${email},${fname},${lname},${ybirth},${country},${HIVStatus},${Diagnosisyear},${ARTStatus},${ARTyear}"
+new_details="${uuid},${fname},${lname},${email},${password},${role},${ybirth},${HIVStatus},${Diagnosisyear},${ARTStatus},${ARTyear},${country}"
 
 # Update the file with new details
-grep -v "${uuid},${email}" "$file_path" > "${file_path}.tmp"
+grep -v "^${uuid}" "$file_path" > "${file_path}.tmp"
 echo "${new_details}" >> "${file_path}.tmp"
 mv "${file_path}.tmp" "$file_path"
 
 echo "Profile updated successfully."
+
+# Disable debugging
+set +x

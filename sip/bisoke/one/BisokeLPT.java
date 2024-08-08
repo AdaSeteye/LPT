@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import static sip.bisoke.one.BisokeLPT.updateUserProfileWithProcess;
+//import static sip.bisoke.one.BisokeLPT.updateUserProfileWithProcess;
 
 //import sip.bisoke.one.models.Admin;
 /// --- Models --- ///
@@ -199,7 +200,7 @@ class Patient extends User {
             System.out.print("-- When did you start ART? (yyyy-mm-dd) >_ ");
             String artYear = scanner.nextLine();
 
-            String result = updateUserProfileWithProcess(email, this.getUuid(), password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear);
+            String result = updateUserProfileWithProcess(email, this.getUuid(), password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear, this.getRole());
 
             if (result != null) {
                 System.out.println("Profile update result: " + result);
@@ -402,11 +403,14 @@ public class BisokeLPT {
 
     private static String getUserInfoFromScript(String email, String password) {
         try {
-
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "mnt/c/Users/STUDENT/Desktop/SIP/LPT/sip/bisoke/one/user_retriever.sh", email, password
-            );
-            // pb.directory();
-            // pb.redirectErrorStream(true);
+            String[] command = {
+                "bash",
+                "-c",
+                "/mnt/c/Users/STUDENT/Desktop/SIP/LPT/sip/bisoke/one/user_retriever.sh " + email + " " + password
+            };
+            ProcessBuilder pb = new ProcessBuilder(command);
+            //pb.directory();
+            pb.redirectErrorStream(true);
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -482,14 +486,27 @@ public class BisokeLPT {
         return "";
     }
 
-    public static String updateUserProfileWithProcess(String email, String uuid, String password, String firstName, String lastName, String dateOfBirth, String country, String HIVStatus, String diagnosisDate, String onART, String artYear) {
+    public static String updateUserProfileWithProcess(String email, String uuid, String password, String firstName, String lastName, String dateOfBirth, String country, String HIVStatus, String diagnosisDate, String onART, String artYear, String role) {
         try {
-            String path = Paths.get(System.getProperty("user.dir"), "scripts/update_profile.sh").toString();
+            String path = Paths.get(System.getProperty("user.dir"), "./scripts/update_profile.sh").toString();
             String[] command = {
-                "sh",
+                "bash",
                 "-c",
-                path + " " + email + " " + uuid + " " + password + " " + firstName + " " + lastName + " " + dateOfBirth + " " + country + " " + HIVStatus + " " + diagnosisDate + " " + onART + " " + artYear
+                path, // Path to the script
+                email, // Email argument
+                uuid, // UUID argument
+                password, // Password argument
+                firstName, // First name argument
+                lastName, // Last name argument
+                dateOfBirth, // Date of birth argument
+                country, // Country argument
+                HIVStatus, // HIV status argument
+                diagnosisDate, // Diagnosis date argument
+                onART, // ART status argument
+                artYear, // ART year argument
+                role
             };
+
             System.out.println("Command: " + String.join(" ", command));
 
             ProcessBuilder pb = new ProcessBuilder(command);

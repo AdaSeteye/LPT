@@ -1,7 +1,6 @@
 package sip.bisoke.one;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
@@ -293,8 +292,11 @@ public class BisokeLPT {
         // Implementation for completing registration
         System.out.println("We need Your information to proceed...");
 
-        String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.sh";
-        String completePath = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/complete_registration.sh";
+        // String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.sh";
+        String path = Paths.get(System.getProperty("user.dir"), "scripts/checkuuid.sh").toString();
+
+        //  String completePath = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/complete_registration.sh";
+        String completePath = Paths.get(System.getProperty("user.dir"), "scripts/complete_registration.sh").toString();
         System.out.print("-- Please enter your uuid >_ ");
         String uuid = scanner.nextLine();
 
@@ -387,9 +389,10 @@ public class BisokeLPT {
             //   String path = getCleanPath("register_user.bat");
 
             // URL path = ActiveDirectoryQuery.class.getResource("relative/path/to/EmailFQDN.exe");
-            String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/register_user.bat";
+            //  String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/register_user.bat";
+            String path = Paths.get(System.getProperty("user.dir"), "scripts/register_user.sh").toString();
             // Call the bash script to initiate registration
-            String feedback = registerUserWithProcessCall(path.replace("\\", "/"), email);
+            String feedback = registerUserWithProcessCall(path, email);
             System.out.println(feedback);
         } catch (Exception e) {
             System.out.println("Could not initiate registration");
@@ -404,10 +407,11 @@ public class BisokeLPT {
 
     private static String getUserInfoFromScript(String email, String password) {
         try {
+            String path = Paths.get(System.getProperty("user.dir"), "scripts/user_retriever.sh").toString();
             String[] command = {
                 "bash",
                 "-c",
-                "/mnt/c/Users/STUDENT/Desktop/SIP/LPT/sip/bisoke/one/user_retriever.sh " + email + " " + password
+                path + " " + email + " " + password
             };
             ProcessBuilder pb = new ProcessBuilder(command);
             //pb.directory();
@@ -435,7 +439,7 @@ public class BisokeLPT {
     private static String runProcess(String filePath) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", filePath);
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
@@ -457,14 +461,17 @@ public class BisokeLPT {
 
     private static String completeRegistrationWithProcessCall(String filePath, String email, String uuid, String password, String fname, String lname, String dob, String hivStatus, String diagnosisDate, String onART, String artStartDate, String countryISOCode) {
         try {
+            String args = String.join(" ", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate);
 
             // Create ProcessBuilder instance
             ProcessBuilder pb = new ProcessBuilder(
-                    "sh", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate
+                    "bash",
+                    "-c",
+                    args
             );
 
             pb.redirectErrorStream(true);
-            pb.directory(new File("./"));
+            // pb.directory(new File("./"));
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -521,7 +528,7 @@ public class BisokeLPT {
     private static String checkUserwithProcess(String path, String email, String uuid) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", path, email, uuid);
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", path + " " + email + " " + uuid);
 
             pb.redirectErrorStream(true);
             Process process = pb.start();
@@ -545,7 +552,7 @@ public class BisokeLPT {
     private static String registerUserWithProcessCall(String filePath, String email) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", filePath, email);
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath + " " + email);
 
             pb.redirectErrorStream(true);
             Process process = pb.start();
@@ -568,8 +575,9 @@ public class BisokeLPT {
 
     private static void handleDataExport() {
         try {
-            runProcess("C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/csv_exporter.bat");
-            System.out.println("Data saved in Downloads Directory");
+            final String path = Paths.get(System.getProperty("user.dir"), "scripts/csv_exporter.sh").toString();
+            runProcess(path);
+            System.out.println("Data saved in Downloads Directory ✅");
         } catch (Exception e) {
             System.out.println("Could not export Data");
         }

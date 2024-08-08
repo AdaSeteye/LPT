@@ -346,7 +346,6 @@ public class BisokeLPT {
         String password = scanner.nextLine();
 
         String userInfo = getUserInfoFromScript(email, password);
-        System.out.println("USER DATA: " + userInfo);
 
         if ("not_found".equalsIgnoreCase(userInfo.trim())) {
             System.out.println("Authentication failed.");
@@ -404,9 +403,10 @@ public class BisokeLPT {
     private static String getUserInfoFromScript(String email, String password) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_retriever.bat", email, password
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "mnt/c/Users/STUDENT/Desktop/SIP/LPT/sip/bisoke/one/user_retriever.sh", email, password
             );
-            pb.redirectErrorStream(true);
+            // pb.directory();
+            // pb.redirectErrorStream(true);
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -419,7 +419,9 @@ public class BisokeLPT {
 
             process.waitFor();
             System.out.println(output.toString());
+
             return output.toString().trim();
+
         } catch (IOException | InterruptedException e) {
             return null;
         }
@@ -482,12 +484,13 @@ public class BisokeLPT {
 
     public static String updateUserProfileWithProcess(String email, String uuid, String password, String firstName, String lastName, String dateOfBirth, String country, String HIVStatus, String diagnosisDate, String onART, String artYear) {
         try {
-            String path = Paths.get(System.getProperty("user.dir"), "io/update_profile.sh").toString();
+            String path = Paths.get(System.getProperty("user.dir"), "scripts/update_profile.sh").toString();
             String[] command = {
-                "bash",
+                "sh",
                 "-c",
                 path + " " + email + " " + uuid + " " + password + " " + firstName + " " + lastName + " " + dateOfBirth + " " + country + " " + HIVStatus + " " + diagnosisDate + " " + onART + " " + artYear
             };
+            System.out.println("Command: " + String.join(" ", command));
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);

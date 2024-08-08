@@ -1,8 +1,6 @@
-
-
 # Path to the TXT file that acts as a database
-DATABASE_FILE="C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_store.txt"
-
+DATABASE_FILE="user_store.txt"
+echo "----ECHO TEST----"
 # Function to search for an email in the input file and print the line if found
 search_email() {
     local email="$1"

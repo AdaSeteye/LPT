@@ -1,6 +1,5 @@
 # Path to the TXT file that acts as a database
 DATABASE_FILE="user_store.txt"
-echo "----ECHO TEST----"
 # Function to search for an email in the input file and print the line if found
 function search_email()
 {
@@ -17,7 +16,7 @@ function search_email()
     local result=$(grep -i "$email" "$DATABASE_FILE")
 
     if [ -n "$result" ]; then
-        echo "Found: $result"
+        echo "$result"
     else
         echo "No match found for email: $email"
     fi

@@ -13,20 +13,18 @@ Diagnosisyear="$9"
 ARTStatus="${10}"
 ARTyear="${11}"
 role="${12}"
-# print all args
-echo "ALL ARGS: $@"
-echo "THIS IS THE USER'S UUID: $uuid"
+
 # Enable debugging to trace the script's execution
 set -x
 
 # Check if the user exists in the file
 if ! grep -q "^${uuid}" "$file_path"; then
-    echo "Invalid UUID. Update failed."
+    echo "UUID ${uuid} not found in our records!"
     exit 1
 fi
 
 # Prepare the new details
-new_details="${uuid},${fname},${lname},${email},${password},${role},${ybirth},${HIVStatus},${Diagnosisyear},${ARTStatus},${ARTyear},${country}"
+new_details="${uuid}, ${fname}, ${lname}, ${email}, ${password}, ${role}, ${ybirth}, ${HIVStatus}, ${Diagnosisyear}, ${ARTStatus}, ${ARTyear}, ${country}"
 
 # Update the file with new details
 grep -v "^${uuid}" "$file_path" > "${file_path}.tmp"

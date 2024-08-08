@@ -13,6 +13,7 @@ import static sip.bisoke.one.BisokeLPT.updateUserProfileWithProcess;
 /// --- Models --- ///
 // TODO: Move these classes to separate files in the sip.bisoke.one.models package
 
+
 abstract class User {
 
     protected String firstName;
@@ -488,26 +489,15 @@ public class BisokeLPT {
 
     public static String updateUserProfileWithProcess(String email, String uuid, String password, String firstName, String lastName, String dateOfBirth, String country, String HIVStatus, String diagnosisDate, String onART, String artYear, String role) {
         try {
-            String path = Paths.get(System.getProperty("user.dir"), "./scripts/update_profile.sh").toString();
+            String path = Paths.get(System.getProperty("user.dir"), "scripts/update_profile.sh").toString();
+            String args = String.join(" ", email, uuid, password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear, role);
+
             String[] command = {
                 "bash",
                 "-c",
-                path, // Path to the script
-                email, // Email argument
-                uuid, // UUID argument
-                password, // Password argument
-                firstName, // First name argument
-                lastName, // Last name argument
-                dateOfBirth, // Date of birth argument
-                country, // Country argument
-                HIVStatus, // HIV status argument
-                diagnosisDate, // Diagnosis date argument
-                onART, // ART status argument
-                artYear, // ART year argument
-                role
+                path + " " + args
             };
-
-            System.out.println("Command: " + String.join(" ", command));
+            System.out.println("*************TO BE EXECUTED: " + String.join(" ", command));
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);

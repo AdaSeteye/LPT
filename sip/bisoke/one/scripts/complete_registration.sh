@@ -1,7 +1,5 @@
-#!/bin/bash
-
 # Path to the file that acts as the user store
-file_path="C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_store.txt"
+file_path="user_store.txt"
 
 # Function to hash the password
 hash_password() {
@@ -21,9 +19,10 @@ HIVStatus="$8"
 Diagnosisyear="$9"
 ARTStatus="${10}"
 ARTyear="${11}"
+role="patient"
 
 # Check if the user exists in the file
-if ! grep -q "${uuid},${email}" "$file_path"; then
+if ! grep -q "^${uuid}" "$file_path"; then
     echo "Invalid UUID or email. Registration failed."
     exit 1
 fi
@@ -32,13 +31,22 @@ fi
 hash_password "$password"
 
 # Prepare the new details to be appended
-new_details="${hashed_password}, ${fname}, ${lname}, ${ybirth}, ${country}, ${HIVStatus}, ${Diagnosisyear}, ${ARTStatus}, ${ARTyear}"
+new_details="${uuid}, ${fname}, ${lname}, ${email}, ${hashed_password}, ${role}, ${ybirth}, ${HIVStatus}, ${Diagnosisyear}, ${ARTStatus}, ${ARTyear}, ${country}"
 
 # Update the file with new details
-grep -v "${uuid},${email}" "$file_path" > "${file_path}.tmp"
-grep "${uuid},${email}" "$file_path" | while IFS= read -r line; do
-    echo "${line},${new_details}"
-done >> "${file_path}.tmp"
-mv "${file_path}.tmp" "$file_path"
+if grep -q "^${uuid}, ${email}" "$file_path"; then
+    # Remove the old line and append the new details
+    grep -v "^${uuid}, ${email}" "$file_path" > "${file_path}.tmp"
+    echo "${new_details}" >> "${file_path}.tmp"
+    mv "${file_path}.tmp" "$file_path"
+else
+    echo "An error occurred: UUID and email not found during the update."
+    exit 1
+fi
 
-echo "Registration completed successfully."
+# Check if the operation was successful
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "An error occurred during registration."
+fi

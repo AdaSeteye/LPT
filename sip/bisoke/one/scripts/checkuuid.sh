@@ -1,7 +1,5 @@
-#!/bin/bash
-
 # Path to the file that acts as the user store
-file_path="/mnt/c/Users/STUDENT/Desktop/LPT/sip/bisoke/one/user_store.txt"
+file_path="user_store.txt"
 
 # Parameters passed to the script
 email="$1"

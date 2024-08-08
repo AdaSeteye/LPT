@@ -130,8 +130,9 @@ class Patient extends User {
         System.out.println("Hello, " + getUsername());
 
         System.out.println("1. View Profile");
-        System.out.println("2. Update Profile");
-        System.out.println("3. Logout");
+        System.out.println("2. View Life Expectancy");
+        System.out.println("3. Update Profile");
+        System.out.println("4. Logout");
     }
 
     public String getUserProfileSummary() {
@@ -165,6 +166,10 @@ class Patient extends User {
         System.out.println(">-Computed Lifespan: 34 Years");
         System.out.println(getUserProfileSummary());
 
+    }
+
+    public void viewLifespanExpentancy() {
+        System.out.println("Your computed lifespan is 34 years.");
     }
 
     public void updateProfile() {
@@ -335,7 +340,13 @@ public class BisokeLPT {
             System.out.print("-- When did you started ART? (yyyy-mm-dd) >_ ");
             String artYear = scanner.nextLine();
 
-            completeRegistrationWithProcessCall(completePath, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
+            String response = completeRegistrationWithProcessCall(completePath, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
+
+            if ("success".equals(response)) {
+                System.out.println("All good! You can now login.");
+            } else {
+                System.out.println("Registration failed: " + response);
+            }
         }
     }
 
@@ -361,6 +372,7 @@ public class BisokeLPT {
 
         // Here we Extract user role from the fields
         String role = fields[5];
+        System.out.println("Role: " + role);
 
         if ("admin".equalsIgnoreCase(role)) {
             return new Admin(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
@@ -427,7 +439,7 @@ public class BisokeLPT {
             }
 
             process.waitFor();
-            System.out.println(output.toString());
+            // System.out.println("PROCESS OUT: " + output.toString());
 
             return output.toString().trim();
 
@@ -461,17 +473,16 @@ public class BisokeLPT {
 
     private static String completeRegistrationWithProcessCall(String filePath, String email, String uuid, String password, String fname, String lname, String dob, String hivStatus, String diagnosisDate, String onART, String artStartDate, String countryISOCode) {
         try {
-            String args = String.join(" ", filePath, email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate);
+            String args = String.join(" ", email, uuid, password, fname, lname, dob, countryISOCode, hivStatus, diagnosisDate, onART, artStartDate);
 
             // Create ProcessBuilder instance
             ProcessBuilder pb = new ProcessBuilder(
                     "bash",
                     "-c",
-                    args
+                    filePath + " " + args
             );
-
+            System.out.println("COMMAND: " + filePath + " " + args);
             pb.redirectErrorStream(true);
-            // pb.directory(new File("./"));
             Process process = pb.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -504,7 +515,7 @@ public class BisokeLPT {
                 "-c",
                 path + " " + args
             };
-            System.out.println("*************TO BE EXECUTED: " + String.join(" ", command));
+            //System.out.println("*************TO BE EXECUTED: " + String.join(" ", command));
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.redirectErrorStream(true);
@@ -566,7 +577,7 @@ public class BisokeLPT {
             }
 
             process.waitFor();
-            System.out.println("OUUUT: " + output.toString());
+            // System.out.println("OUUUT: " + output.toString());
             return output.toString().trim();
         } catch (IOException | InterruptedException e) {
             return null;
@@ -608,8 +619,10 @@ public class BisokeLPT {
             case 1 ->
                 patient.showProfile();
             case 2 ->
+                patient.viewLifespanExpentancy();
+            case 3 ->
                 patient.updateProfile();
-            case 3 -> {
+            case 4 -> {
                 System.out.println("Logging out...");
                 System.exit(0);
             }

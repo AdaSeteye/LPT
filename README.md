@@ -7,3 +7,9 @@
 - Baimam Boukar
 - Alvina Minja
 
+
+# Feedbacks - Presentation
+
+- Integrate proper polymorphism in the authentication
+- Masking password
+- Enhance update | Users should be able to update specific fields that they want to update. 

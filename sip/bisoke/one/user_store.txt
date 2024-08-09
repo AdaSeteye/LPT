@@ -4,6 +4,6 @@
 2f7403db-4773-4838-a9d7-c774bc14389d, first.user@lpt.com, patient
 9ec8c09c-c329-4c1e-b5cb-964de61ef69b, Alvina, Minjess, aminja@gmail.her, passpass, patient, 10-10-2002, false, 10-10-2002, false, 10-10-2002, TZN
 bcf2653d-ad9d-4eb9-91b4-a2017fb68ce5, Tefang, Missvick, missvick@gmail.com, a4e653ed852904a05b852e439361c1f99e53d7eb56fdf3bbec198b6278743150, patient, 10-10-2002, CM, false, 10-10-2002, false, 10-10-2002
-20e21f6a-82a6-48c9-a072-a93303cd7944, Kali, Hapsi, khali@gmail.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, false, 10-10-2002, false, 10-10-2002, CM
+20e21f6a-82a6-48c9-a072-a93303cd7944, Kali, Hapsi, khali@gmail.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 2002-10-07, false, 2022-10-07, false, 2024-10-10, CM
 dab803e4-d705-4a8f-a664-b541495aa313, Mg User2, 2000-10-01, magic.user@cmu.edu, 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8, , RW, 2010-10-10, true, 2016-10-10, patient, true
 e8992626-7ccf-4a99-9b8a-556cda2ed1af, magic.user2@cmu.edu, patient

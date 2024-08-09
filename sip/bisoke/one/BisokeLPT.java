@@ -21,7 +21,7 @@ public class BisokeLPT {
             showMainMenu();
             System.out.print("--- Select an Option >_ ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline left-over
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -362,6 +362,31 @@ public class BisokeLPT {
             System.out.println("Data saved in Downloads Directory ✅");
         } catch (Exception e) {
             System.out.println("Could not export Data");
+        }
+    }
+
+    public static int getAverageLifespanByCountry(String countryISOCode) {
+        try {
+            // Build the command to execute the Bash script
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "scripts/lifespan_retriever.sh", countryISOCode
+            );
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            // Capture the output from the Bash script
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String lifespanStr = reader.readLine();
+
+            // Parse the output to an integer
+            if (lifespanStr != null) {
+                System.out.println(".(.--.)" + lifespanStr);
+                return Integer.parseInt(lifespanStr.trim());
+            } else {
+                return 70;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 70; // Default value in case of an error
         }
     }
 

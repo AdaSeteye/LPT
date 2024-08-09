@@ -1,5 +1,7 @@
 package sip.bisoke.one.models;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 import javax.swing.text.Utilities;
 import sip.bisoke.one.BisokeLPT;
@@ -95,7 +97,42 @@ public class Patient extends User {
     }
 
     public void viewLifespanExpentancy() {
-        System.out.println("Your computed lifespan is 34 years.");
+        int lifespan = computeLifespan();
+        System.out.println("Your computed lifespan is " + lifespan + " years.");
+    }
+
+    // Method to compute the estimated lifespan
+    public int computeLifespan() {
+        // Assuming that lifespan is based on the countryISOCode
+        int averageLifespan = BisokeLPT.getAverageLifespanByCountry(this.getCountryISOCode());
+
+        // Convert date strings to LocalDate for calculation
+        LocalDate dob = LocalDate.parse(dateOfBirth);
+        LocalDate diagnosis = LocalDate.parse(diagnosisDate);
+        LocalDate artStart = onART ? LocalDate.parse(artStartDate) : diagnosis.plusYears(5);
+
+        // Calculate the patient's age at diagnosis
+        int ageAtDiagnosis = (int) ChronoUnit.YEARS.between(dob, diagnosis);
+
+        // Calculate initial remaining lifespan
+        int remainingLifespan = averageLifespan - ageAtDiagnosis;
+
+        if (hivStatus) {
+            // Calculate years delayed in starting ART
+            int yearsDelayed = (int) ChronoUnit.YEARS.between(diagnosis, artStart);
+
+            // If ART is delayed beyond 5 years, limit lifespan to 5 years after diagnosis
+            if (yearsDelayed >= 5) {
+                remainingLifespan = 5;
+            } else {
+                // Reduce remaining lifespan by 10% for each year delayed
+                for (int i = 0; i < yearsDelayed; i++) {
+                    remainingLifespan *= 0.9;
+                }
+            }
+        }
+
+        return Math.max(remainingLifespan, 0);
     }
 
     public void updateProfile() {

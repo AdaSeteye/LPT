@@ -1,6 +1,7 @@
 package sip.bisoke.one;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
@@ -80,6 +81,7 @@ public class BisokeLPT {
             System.out.println("\n User not found, please register first.\n ");
 
         } else {
+            Console console = System.console();
             System.out.println("User with UUID " + uuid + " found! Let's proceed...");
             System.out.print("-- Please enter your first name >_ ");
             String firstName = scanner.nextLine();
@@ -87,7 +89,8 @@ public class BisokeLPT {
             String lastName = scanner.nextLine();
 
             System.out.print("-- Please enter your password >_ ");
-            String password = scanner.nextLine();
+            char[] passwordArray = console.readPassword("Enter your password: ");
+            String password = new String(passwordArray);
 
             System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
             String dateOfBirth = scanner.nextLine();
@@ -117,14 +120,16 @@ public class BisokeLPT {
     }
 
     private static User authenticate(Scanner scanner) {
-
+        Console console = System.console();
         System.out.println("""
         *** Welcome, We need to authenticate you first! ***
         """);
         System.out.print("-- Please enter your email >_ ");
         String email = scanner.nextLine();
         System.out.print("-- Please enter your password >_ ");
-        String password = scanner.nextLine();
+
+        char[] passwordArray = console.readPassword("Enter your password: ");
+        String password = new String(passwordArray);
 
         String userInfo = getUserInfoFromScript(email, password);
 

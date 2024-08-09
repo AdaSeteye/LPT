@@ -9,10 +9,13 @@ public class Admin extends User {
     @Override
     public void showMenu() {
         System.out.println("------------------------------------------------------------");
-        System.out.println("1. Initiate Registration");
-        System.out.println("2. Export User Data");
-        System.out.println("3. Export Analytics Data");
-        System.out.println("4. Logout");
+        System.out.println("Welcome Back, " + getUsername());
+        System.out.println("------------------------------------------------------------");
+        
+        System.out.println("1. 📂Initiate Registration");
+        System.out.println("2. 📊Export User Data");
+        System.out.println("3. 📈Export Analytics Data");
+        System.out.println("4. 📴Logout");
     }
 
 }

@@ -1,7 +1,9 @@
 package sip.bisoke.one.models;
 
 import java.util.Scanner;
+import javax.swing.text.Utilities;
 import sip.bisoke.one.BisokeLPT;
+import sip.bisoke.one.utils.Utils;
 
 public class Patient extends User {
 
@@ -49,13 +51,14 @@ public class Patient extends User {
 
     @Override
     public void showMenu() {
-        System.out.println("---------------------------------------------------------------------------------");
+        //Utils.clearConsole();
+        System.out.println("------------------------------------------------------------");
         System.out.println("Hello, " + getUsername());
-
-        System.out.println("1. View Profile 🪪");
-        System.out.println("2. View Life Expectancy 🕰️");
-        System.out.println("3. Update Profile 🔄");
-        System.out.println("4. Logout 🚪");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("1. 🪪View Profile");
+        System.out.println("2. 🕰️View Life Expectancy");
+        System.out.println("3. 🔄Update Profile");
+        System.out.println("4. 📴Logout");
     }
 
     public String getUserProfileSummary() {

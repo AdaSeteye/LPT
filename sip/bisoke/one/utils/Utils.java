@@ -25,4 +25,18 @@ package sip.bisoke.one.utils;
         }
         System.out.println("\n");
     }
+
+    public static void clearConsole() {
+        try {
+            // If running on Windows
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // For UNIX-like systems
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -368,7 +368,7 @@ public class BisokeLPT {
     public static int getAverageLifespanByCountry(String countryISOCode) {
         try {
             // Build the command to execute the Bash script
-            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "scripts/lifespan_retriever.sh", countryISOCode
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "scripts/lifespan_retriever.sh" + " " + countryISOCode
             );
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
@@ -376,17 +376,10 @@ public class BisokeLPT {
             // Capture the output from the Bash script
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String lifespanStr = reader.readLine();
-
-            // Parse the output to an integer
-            if (lifespanStr != null) {
-                System.out.println(".(.--.)" + lifespanStr);
-                return Integer.parseInt(lifespanStr.trim());
-            } else {
-                return 70;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 70; // Default value in case of an error
+            System.out.println("--> Lifespan: " + lifespanStr);
+            return Integer.parseInt(lifespanStr);
+        } catch (IOException | NumberFormatException e) {
+            return 70;
         }
     }
 

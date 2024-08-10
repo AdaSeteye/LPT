@@ -103,36 +103,41 @@ public class Patient extends User {
 
     // Method to compute the estimated lifespan
     public int computeLifespan() {
-        // Assuming that lifespan is based on the countryISOCode
+        // Get the average lifespan based on the patient's country ISO code
         int averageLifespan = BisokeLPT.getAverageLifespanByCountry(this.getCountryISOCode());
 
         // Convert date strings to LocalDate for calculation
         LocalDate dob = LocalDate.parse(dateOfBirth);
         LocalDate diagnosis = LocalDate.parse(diagnosisDate);
-        LocalDate artStart = onART ? LocalDate.parse(artStartDate) : diagnosis.plusYears(5);
 
         // Calculate the patient's age at diagnosis
         int ageAtDiagnosis = (int) ChronoUnit.YEARS.between(dob, diagnosis);
 
-        // Calculate initial remaining lifespan
+        // Calculate initial remaining lifespan based on the average lifespan
         int remainingLifespan = averageLifespan - ageAtDiagnosis;
 
         if (hivStatus) {
-            // Calculate years delayed in starting ART
-            int yearsDelayed = (int) ChronoUnit.YEARS.between(diagnosis, artStart);
-
-            // If ART is delayed beyond 5 years, limit lifespan to 5 years after diagnosis
-            if (yearsDelayed >= 5) {
+            if (!onART) {
+                // If the patient is not on ART, their lifespan is limited to 5 years after diagnosis
                 remainingLifespan = 5;
             } else {
-                // Reduce remaining lifespan by 10% for each year delayed
-                for (int i = 0; i < yearsDelayed; i++) {
+                // Patient is on ART, check when ART was started
+                LocalDate artStart = LocalDate.parse(artStartDate);
+                int yearsDelayed = (int) ChronoUnit.YEARS.between(diagnosis, artStart);
+
+                // Calculate the remaining lifespan after starting ART
+                remainingLifespan *= 0.9; // 90% of remaining lifespan if ART started immediately
+
+                // Reduce remaining lifespan by 10% for each additional year delayed
+                for (int i = 1; i <= yearsDelayed; i++) {
                     remainingLifespan *= 0.9;
                 }
             }
         }
 
-        return Math.max(remainingLifespan, 0);
+        // Round up the remaining lifespan to the nearest full year and ensure it's non-negative
+        //System.out.println("------" + remainingLifespan);
+        return Math.max((int) Math.ceil(remainingLifespan), 0);
     }
 
     public void updateProfile() {

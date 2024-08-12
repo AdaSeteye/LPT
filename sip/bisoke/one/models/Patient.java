@@ -91,7 +91,7 @@ public class Patient extends User {
         System.out.println(">-On ART: " + this.onART);
         System.out.println(">-ART Start Date: " + (artStartDate != null ? artStartDate : "N/A"));
         System.out.println(">-Country ISO Code: " + countryISOCode);
-        System.out.println(">-Computed Lifespan: 34 Years");
+        //System.out.println(">-Computed Lifespan: 34 Years");
         System.out.println(getUserProfileSummary());
 
     }
@@ -155,13 +155,13 @@ public class Patient extends User {
             System.out.print("-- Enter new password >_ ");
             String password = scanner.nextLine();
 
-            System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
+            System.out.print("-- Please enter your date of birth (dd-mm-yyyy) >_ ");
             String dateOfBirth = scanner.nextLine();
 
             System.out.print("-- Are you HIV positive? (true/false) >_ ");
             String HIVStatus = scanner.nextLine();
 
-            System.out.print("-- Please enter your diagnosis date (yyyy-mm-dd) >_ ");
+            System.out.print("-- Please enter your diagnosis date (dd-mm-yyyy) >_ ");
             String diagnosisDate = scanner.nextLine();
 
             System.out.print("-- Are you on ART? (true/false) >_ ");
@@ -170,7 +170,7 @@ public class Patient extends User {
             System.out.print("-- What is your country ISO? >_ ");
             String country = scanner.nextLine();
 
-            System.out.print("-- When did you start ART? (yyyy-mm-dd) >_ ");
+            System.out.print("-- When did you start ART? (dd-mm-yyyy) >_ ");
             String artYear = scanner.nextLine();
 
             String result = BisokeLPT.updateUserProfileWithProcess(email, this.getUuid(), password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear, this.getRole());

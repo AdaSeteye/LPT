@@ -118,13 +118,13 @@ public class BisokeLPT {
             char[] passwordArray = console.readPassword("-- Please enter your password >_ ");
             String password = new String(passwordArray);
 
-            System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
+            System.out.print("-- Please enter your date of birth (dd-mm-yyyy) >_ ");
             String dateOfBirth = scanner.nextLine();
 
             System.out.print("-- Are you HIV positive? (true/false) >_ ");
             String hivStatus = scanner.nextLine();
 
-            System.out.print("-- Please enter your diagnosis date (yyyy-mm-dd) >_ ");
+            System.out.print("-- Please enter your diagnosis date (dd-mm-yyyy) >_ ");
             String diagnosisDate = scanner.nextLine();
 
             System.out.print("-- Are you on ART? (true/false) >_ ");
@@ -132,7 +132,7 @@ public class BisokeLPT {
             System.out.print("-- What is your country ISO? >_ ");
             String country = scanner.nextLine();
 
-            System.out.print("-- When did you started ART? (yyyy-mm-dd) >_ ");
+            System.out.print("-- When did you started ART? (dd-mm-yyyy) >_ ");
             String artYear = scanner.nextLine();
 
             String response = completeRegistrationWithProcessCall(completePath, email, uuid, password, firstName, lastName, dateOfBirth, country, hivStatus, diagnosisDate, onART, artYear);
@@ -431,12 +431,19 @@ public class BisokeLPT {
 
     private static void handlePatientChoice(int choice, Patient patient) {
         switch (choice) {
-            case 1 ->
+            case 1 -> {
+
                 patient.showProfile();
-            case 2 ->
+                Utils.pauseSystem("\n Press Enter key to continue...");
+            }
+            case 2 -> {
                 patient.viewLifespanExpentancy();
-            case 3 ->
+                Utils.pauseSystem("\n Press Enter key to continue...");
+            }
+            case 3 -> {
                 patient.updateProfile();
+                Utils.pauseSystem("\n Press Enter key to continue...");
+            }
             case 4 -> {
                 patient.logout();
             }

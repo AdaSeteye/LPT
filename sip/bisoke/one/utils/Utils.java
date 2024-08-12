@@ -3,6 +3,9 @@ package sip.bisoke.one.utils;
 /// --- Utils --- ///
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Utils {
@@ -266,5 +269,15 @@ public class Utils {
         System.out.println(message);
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();  // Wait for the user to press Enter
+    }
+
+    public static boolean isValidDateFormat(String date) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-mm-yyyy");
+            LocalDate.parse(date, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

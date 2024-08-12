@@ -3,7 +3,6 @@ package sip.bisoke.one.models;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
-import javax.swing.text.Utilities;
 import sip.bisoke.one.BisokeLPT;
 import sip.bisoke.one.utils.Utils;
 
@@ -54,9 +53,10 @@ public class Patient extends User {
     @Override
     public void showMenu() {
         //Utils.clearConsole();
-        System.out.println("------------------------------------------------------------");
-        System.out.println("Hello, " + getUsername());
-        System.out.println("------------------------------------------------------------");
+        Utils.prettyPrintWith("green", "          +--------------------------------------------------+", true);
+        Utils.prettyPrintWith("green", "          |      Hello 👋 " + getUsername() + ", Welcome Back!        |", true);
+        Utils.prettyPrintWith("green", "          +--------------------------------------------------+", true);
+        System.out.println();
         System.out.println("1. 🪪View Profile");
         System.out.println("2. 🕰️View Life Expectancy");
         System.out.println("3. 🔄Update Profile");
@@ -183,5 +183,21 @@ public class Patient extends User {
         } catch (Exception e) {
             System.out.println("An error occurred during profile update.");
         }
+    }
+
+    @Override
+    public void login() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void logout() {
+        String[] args = {};
+        BisokeLPT.main(args);
+    }
+
+    @Override
+    public void showHelp() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

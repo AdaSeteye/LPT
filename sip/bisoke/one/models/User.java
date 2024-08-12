@@ -48,4 +48,10 @@ public abstract class User {
 
     public abstract void showMenu();
 
+    public abstract void login();
+
+    public abstract void logout();
+
+    public abstract void showHelp();
+
 }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import static java.lang.System.exit;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import sip.bisoke.one.models.Admin;
@@ -18,45 +19,73 @@ public class BisokeLPT {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            Utils.clearConsole();
             showMainMenu();
-            System.out.print("--- Select an Option >_ ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            // try {
+            //     Utils.showLoader(10);
+            // } catch (InterruptedException ex) {
+            // }
+            boolean validChoice = false;
 
-            switch (choice) {
-                case 1:
-                    completeRegistration();
-                    break;
-                case 2:
-                    User user = authenticate(scanner);
-                    if (user == null) {
-                        System.out.println("Authentication failed.");
-                        continue; // Restart the menu if authentication fails
+            while (!validChoice) {
+                System.out.print("--- Select an Option >_ ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline left-over
+
+                switch (choice) {
+                    case 1 -> {
+                        completeRegistration();
+                        validChoice = true;
                     }
-                    while (true) {
-                        user.showMenu();
-                        System.out.print("--- Select an Option >_ ");
-                        int userChoice = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline left-over
-
-                        if (user instanceof Admin) {
-                            handleAdminChoice(userChoice, (Admin) user);
-                        } else if (user instanceof Patient) {
-                            handlePatientChoice(userChoice, (Patient) user);
+                    case 2 -> {
+                        User user = authenticate(scanner);
+                        if (user == null) {
+                            System.out.println("Authentication failed.");
+                            validChoice = true; // To exit the inner loop and restart the main menu
+                        } else {
+                            while (true) {
+                                Utils.clearConsole();
+                                user.showMenu();
+                                System.out.print("--- Select an Option >_ ");
+                                int userChoice = scanner.nextInt();
+                                scanner.nextLine(); // Consume newline left-over
+                                switch (user) {
+                                    case Admin admin ->
+                                        handleAdminChoice(userChoice, admin);
+                                    case Patient patient ->
+                                        handlePatientChoice(userChoice, patient);
+                                    default ->
+                                        System.out.println("Invalid user type.");
+                                }
+                            }
                         }
                     }
-                default:
-                    System.out.println("Invalid option. Please try again.");
+                    case 3 ->
+                        Utils.showSystemHelp();
+                    case 4 ->
+                        exit(0);
+
+                    default ->
+                        System.out.println("❌ The option you selected is invalid.");
+                }
             }
         }
     }
 
     private static void showMainMenu() {
         Utils utils = new Utils();
+
         utils.showLogo();
-        utils.showDivider("-");
-        System.out.println("1. 📝Complete Registration");
-        System.out.println("2. 🔐Login  \n");
+        //utils.showDivider("-");
+        //utils.showBarChart();
+        //utils.showDivider("-");
+        //utils.showLineChart();
+        // Utils.drawHorizontalDashboard(labels, values);
+        String[] menuItems = {"📝Complete Registration", "🔐Login", "❓Help & FAQs", " Exit \n"};
+        for (int i = 0; i < menuItems.length; i++) {
+            Utils.prettyPrintWith("gray", (i + 1) + ". " + menuItems[i], true);
+        }
+
     }
 
     private static void completeRegistration() {
@@ -64,10 +93,8 @@ public class BisokeLPT {
         // Implementation for completing registration
         System.out.println("We need Your information to proceed...");
 
-        // String path = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/checkuuid.sh";
         String path = Paths.get(System.getProperty("user.dir"), "scripts/checkuuid.sh").toString();
 
-        //  String completePath = "C://Users/STUDENT/Desktop/LPT/sip/bisoke/one/complete_registration.sh";
         String completePath = Paths.get(System.getProperty("user.dir"), "scripts/complete_registration.sh").toString();
         System.out.print("-- Please enter your uuid >_ ");
         String uuid = scanner.nextLine();
@@ -88,8 +115,7 @@ public class BisokeLPT {
             System.out.print("-- Please enter your last name >_ ");
             String lastName = scanner.nextLine();
 
-            System.out.print("-- Please enter your password >_ ");
-            char[] passwordArray = console.readPassword("Enter your password: ");
+            char[] passwordArray = console.readPassword("-- Please enter your password >_ ");
             String password = new String(passwordArray);
 
             System.out.print("-- Please enter your date of birth (yyyy-mm-dd) >_ ");
@@ -126,9 +152,9 @@ public class BisokeLPT {
         """);
         System.out.print("-- Please enter your email >_ ");
         String email = scanner.nextLine();
-        System.out.print("-- Please enter your password >_ ");
+        //System.out.print("-- Please enter your password >_ ");
 
-        char[] passwordArray = console.readPassword("Enter your password: ");
+        char[] passwordArray = console.readPassword("-- Please enter your password >_ ");
         String password = new String(passwordArray);
 
         String userInfo = getUserInfoFromScript(email, password);
@@ -162,7 +188,7 @@ public class BisokeLPT {
         try {
             Utils utils = new Utils();
             utils.showLogo();
-            utils.showDivider("-");
+            // utils.showDivider("-");
             Scanner scanner = new Scanner(System.in);
             System.out.println("""
         **__INITIATE USER REGISTRATION---***
@@ -177,6 +203,7 @@ public class BisokeLPT {
             // Call the bash script to initiate registration
             String feedback = registerUserWithProcessCall(path, email);
             System.out.println(feedback);
+            Utils.pauseSystem("Press Enter key to continue...");
         } catch (Exception e) {
             System.out.println("Could not initiate registration");
         }
@@ -395,8 +422,7 @@ public class BisokeLPT {
                 System.out.println("Exporting analytics data...");
                 break;
             case 4:
-                System.out.println("Logging out...");
-                System.exit(0);
+                admin.logout();
                 break;
             default:
                 System.out.println("Invalid option.");
@@ -412,8 +438,7 @@ public class BisokeLPT {
             case 3 ->
                 patient.updateProfile();
             case 4 -> {
-                System.out.println("Logging out...");
-                System.exit(0);
+                patient.logout();
             }
             default ->
                 System.out.println("Invalid option.");

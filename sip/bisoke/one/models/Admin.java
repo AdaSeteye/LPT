@@ -42,14 +42,14 @@ public class Admin extends User {
         String path = Paths.get(System.getProperty("user.dir"), "scripts/analytics.sh").toString();
         // -- ASK USER TO ENTER FILE NAME -- //
         Scanner scanner = new Scanner(System.in);
-        Utils.prettyPrintWith("yellow", "---Enter the file name to save the data >_", false);
+        Utils.prettyPrintWith("yellow", "---Enter the file name to save the data >_ ", false);
         String fileName = scanner.nextLine();
 
         String data = BisokeLPT.runAnalyticsExportProcess(path, fileName);
         if ("success".equals(data)) {
-            Utils.prettyPrintWith("green", ">_Data Exported Successfully at " + "~/BisokeLPT/" + fileName + "✅ \n", true);
+            Utils.prettyPrintWith("green", ">_Data Exported Successfully at " + "~/BisokeLPT/" + fileName + ".csv ✅ \n" + data + "\n", true);
         } else {
-            Utils.prettyPrintWith("red", "Data Export Failed \n!", true);
+            Utils.prettyPrintWith("red", "Data Export Failed \n!" + data, true);
         }
     }
 

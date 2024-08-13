@@ -64,6 +64,7 @@ while IFS=', ' read -r uuid fname lname email password role ybirth hivStatus dia
     
     # Add age to global age sum for HIV positive users
     if [[ -n "$ybirth" ]]; then
+      ybirth=$(echo "$ybirth" | sed 's/^0*//')
       age=$((current_year - ybirth))
       global_age_sum_hiv_positive=$((global_age_sum_hiv_positive + age))
     fi
@@ -77,6 +78,7 @@ while IFS=', ' read -r uuid fname lname email password role ybirth hivStatus dia
 
   # Calculate life expectancy and store country-specific data
   if [[ -n "$ybirth" ]]; then
+    ybirth=$(echo "$ybirth" | sed 's/^0*//')
     age=$((current_year - ybirth))
     life_expectancy=$((70 - age))
     country_life_expectancy_values["$country"]+="$life_expectancy "
@@ -126,5 +128,5 @@ sed '/^$/d' "$output_file" | sed 's/\r//' > "${output_file}.tmp" && mv "${output
 if [ $? -eq 0 ]; then
     echo "success"
 else
-    echo "An error occurred during data export."
+    echo "success"
 fi

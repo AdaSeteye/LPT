@@ -10,3 +10,4 @@ e8992626-7ccf-4a99-9b8a-556cda2ed1af, magic.user2@cmu.edu, patient
 ebcfa772-6e24-48a3-8e2a-2f3424d2959f, user@bisoke.one, patient
 7520d892-70eb-4f12-9e33-e336
 0084d427, userbeta@bisoke.one, patient
+cae2f6de-a342-4455-96a1-c52c6c8b4fa0, jjj@gmail.com, patient

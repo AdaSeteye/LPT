@@ -246,10 +246,10 @@ public class BisokeLPT {
         }
     }
 
-    private static String runProcess(String filePath) {
+    private static String runProcess(String filePath, String filename) {
         try {
 
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath);
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath + " " + filename);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 
@@ -262,7 +262,7 @@ public class BisokeLPT {
             }
 
             process.waitFor();
-            System.out.println(output.toString());
+            System.out.println("PRCESS OUT: " + output.toString());
             return output.toString().trim();
         } catch (IOException | InterruptedException e) {
             return null;
@@ -389,9 +389,9 @@ public class BisokeLPT {
             Scanner scanner = new Scanner(System.in);
             String filename = scanner.nextLine();
 
-            final String path = Paths.get(System.getProperty("user.dir"), "scripts/csv_exporter.sh" + " " + filename).toString();
-            runProcess(path);
-            System.out.println("Data saved in Downloads Directory ✅");
+            final String path = Paths.get(System.getProperty("user.dir"), "scripts/csv_exporter.sh").toString();
+            String response = runProcess(path, filename);
+            System.out.println(response + " data exported successfully.");
         } catch (Exception e) {
             System.out.println("Could not export Data");
         }
@@ -408,7 +408,7 @@ public class BisokeLPT {
             // Capture the output from the Bash script
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String lifespanStr = reader.readLine();
-            System.out.println("--> Lifespan: " + lifespanStr);
+            // System.out.println("--> Lifespan: " + lifespanStr);
             return Integer.parseInt(lifespanStr);
         } catch (IOException | NumberFormatException e) {
             return 70;

@@ -13,7 +13,7 @@ lifespan=$(awk -F',' -v code="$COUNTRY_ISO_CODE" '$4 == code {print $NF}' "$CSV_
 # Round the lifespan value to the nearest integer
 if [ -n "$lifespan" ]; then
     # Round the lifespan to the nearest integer
-    rounded_lifespan=$(printf "%.0f\n" "$lifespan")
+    rounded_lifespan=$(awk -v num="$lifespan" 'BEGIN {print int(num) == num ? int(num) : int(num) + 1}')
     echo "$rounded_lifespan"
 else
     echo "70"

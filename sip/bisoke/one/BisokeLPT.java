@@ -472,7 +472,7 @@ public class BisokeLPT {
 
             }
             case 3 -> {
-                exportAnalytics();
+                Admin.exportAnalyticsData();
                 Utils.pauseSystem("\n Press Enter key to continue...");
 
             }

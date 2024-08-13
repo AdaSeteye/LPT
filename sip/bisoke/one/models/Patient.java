@@ -98,7 +98,7 @@ public class Patient extends User {
 
     public void viewLifespanExpentancy() {
         int lifespan = computeLifespan();
-        System.out.println("Your computed lifespan is " + lifespan + " years.");
+        Utils.prettyPrintWith("yellow", "Your computed lifespan is " + lifespan + " years. \n", true);
     }
 
     // Method to compute the estimated lifespan

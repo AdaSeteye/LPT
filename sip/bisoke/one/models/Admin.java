@@ -39,13 +39,18 @@ public class Admin extends User {
     }
 
     public static void exportAnalyticsData() {
-        String path = Paths.get(System.getProperty("user.dir"), "scripts/export_analytics_data.sh").toString();
+        String path = Paths.get(System.getProperty("user.dir"), "scripts/analytics.sh").toString();
         // -- ASK USER TO ENTER FILE NAME -- //
         Scanner scanner = new Scanner(System.in);
         Utils.prettyPrintWith("yellow", "---Enter the file name to save the data >_", false);
         String fileName = scanner.nextLine();
 
         String data = BisokeLPT.runAnalyticsExportProcess(path, fileName);
+        if ("success".equals(data)) {
+            Utils.prettyPrintWith("green", ">_Data Exported Successfully at " + "~/BisokeLPT/" + fileName + "✅ \n", true);
+        } else {
+            Utils.prettyPrintWith("red", "Data Export Failed \n!", true);
+        }
     }
 
     @Override

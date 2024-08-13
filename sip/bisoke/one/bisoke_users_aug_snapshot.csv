@@ -1,0 +1,7 @@
+UUID,First Name,Last Name,Email,Password,Role,Year of Birth,HIV Status,Diagnosis Year,ART Status,ART Year,Country
+4ec8c09c-1329-4c1e-b59b-964df61ef69b, Baimam, Boukar, baimamboukar@gmail.com, 37724862aceb5251a71041a5206e194ae8ead6a75e0c3edf5ff0af37a42c34c2, admin
+9ec8c09c-c329-4c1e-b5cb-964de61ef69b, Alvina, Minjess, aminja@gmail.her, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, false, 10-10-2002, false, 10-10-2002, TZ
+9ec8c09c-c329-4c1e-b5cb-964de61ef69c, Glory, ManU, manu@gmail.club, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, false, 10-10-2002, false, 10-10-2002, TZ
+20e21f6a-82a6-48c9-a072-a93303cd7944, Kalimat, Hapz, khali@gmail.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, true, 2022-02-12, true, 2024-02-12, RW
+20e21f6a-82a6-48c9-a072-a93303cd7924, Demz, Izz, izz@gmail.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, false, 2015-02-12, true, 2021-02-12, RW
+20e21f6a-82c6-48c9-a072-a93303cd7984, Mad, Patient, usher@bisoke.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 10-10-2002, true, 2020-02-12, false, 2022-10-12, CM

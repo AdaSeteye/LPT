@@ -246,6 +246,53 @@ public class BisokeLPT {
         }
     }
 
+    // DISPLAY STATS
+    public static String runStatsProcess(String filePath) {
+        try {
+
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            //System.out.println("SYSTEM STATS: " + output.toString());
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    public static String runAnalyticsExportProcess(String filePath, String filename) {
+        try {
+
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", filePath + " " + filename);
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            process.waitFor();
+            //System.out.println("SYSTEM STATS: " + output.toString());
+            return output.toString().trim();
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
     private static String runProcess(String filePath, String filename) {
         try {
 
@@ -424,8 +471,11 @@ public class BisokeLPT {
                 Utils.pauseSystem("\n Press Enter key to continue...");
 
             }
-            case 3 ->
-                System.out.println("Exporting analytics data...");
+            case 3 -> {
+                exportAnalytics();
+                Utils.pauseSystem("\n Press Enter key to continue...");
+
+            }
             case 4 ->
                 admin.logout();
             default ->

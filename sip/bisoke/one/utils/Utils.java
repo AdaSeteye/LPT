@@ -158,11 +158,12 @@ public class Utils {
         System.out.println();
     }
 
-    public static void drawHorizontalDashboard(String[] labels, int[] values) {
+    public static void drawHorizontalDashboard(String[] labels, String[] values) {
         String[] colors = {
             "\u001B[41m", // Red background
             "\u001B[42m", // Green background
-            "\u001B[44m" // Blue background
+            "\u001B[44m", // Blue background
+            "\u001B[45m"
         };
         String resetColor = "\u001B[0m";
 
@@ -181,7 +182,7 @@ public class Utils {
         }
     }
 
-    public static String[] createContainerLines(String label, int value, String color, String resetColor) {
+    public static String[] createContainerLines(String label, String value, String color, String resetColor) {
         String[] lines = new String[7];
         lines[0] = color + "✨•••--------------•••✨" + resetColor;
         lines[1] = color + "|                      |" + resetColor;

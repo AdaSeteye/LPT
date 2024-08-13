@@ -38,6 +38,7 @@ while IFS=', ' read -r uuid fname lname email password role ybirth hivStatus dia
     if [[ -n "$ybirth" ]]; then
       # Extract the year from the birthdate in the format (dd-mm-yyyy)
       birth_year=$(echo "$ybirth" | awk -F '-' '{print $3}')
+      birth_year=$(echo "$birth_year" | sed 's/^0*//')
       age=$((current_year - birth_year))
       global_age_sum_hiv_positive=$((global_age_sum_hiv_positive + age))
     fi

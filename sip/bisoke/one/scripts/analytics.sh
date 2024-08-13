@@ -3,7 +3,7 @@
 file_path="user_store.txt"
 name="$1"
 output_dir="$HOME/BisokeLPT"
-mkdir -p "$output_dir"  # Create the directory if it doesn't exist
+mkdir -p "$output_dir" 
 output_file="$output_dir/$name.csv"
 
 declare -A country_user_count

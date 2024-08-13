@@ -1,10 +1,12 @@
 INPUT_FILE="user_store.txt"
 DOWNLOADS_DIR="$HOME/BisokeLPT"
 
+$filename="$1"
+#read -p "-- Please enter the filename >_ " filename
 # Output file path
-OUTPUT_FILE="$DOWNLOADS_DIR/bisokelpt_users_data.csv"
+OUTPUT_FILE="$DOWNLOADS_DIR/$filename.csv"
 
-echo "UUID,First Name,Last Name,Email,Password,Role,Year of Birth,HIV Status,Diagnosis Year,ART Status,ART Year,Country" > "$OUTPUT_FILE"
+echo "UUID,First Name,Last Name,Email,Password,Role,Year of Birth,HIV Status,Diagnosis Year,ART Status,ART Year,Country" >> "$OUTPUT_FILE"
 
 # Read the input file line by line
 while IFS= read -r line; do

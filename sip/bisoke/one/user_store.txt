@@ -8,4 +8,5 @@ dab803e4-d705-4a8f-a664-b541495aa313, Mg User2, 2000-10-01, magic.user@cmu.edu, 
 e8992626-7ccf-4a99-9b8a-556cda2ed1af, magic.user2@cmu.edu, patient
 20e21f6a-82a6-48c9-a072-a93303cd7944, Kalimat, Hapz, khali@gmail.com, 74f11276b5ca0087b0c419de0e1d802c81d184b9d1349a50c5e1de6507089d18, patient, 2002-02-12, true, 2022-02-12, true, 2024-02-12, RW
 ebcfa772-6e24-48a3-8e2a-2f3424d2959f, user@bisoke.one, patient
-7520d892-70eb-4f12-9e33-e3360084d427, userbeta@bisoke.one, patient
+7520d892-70eb-4f12-9e33-e336
+0084d427, userbeta@bisoke.one, patient

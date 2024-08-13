@@ -11,7 +11,7 @@ public class Admin extends User {
 
     @Override
     public void showMenu() {
-        String[] labels = {"Total Users", "Active Users", "New Users Today"};
+        String[] labels = {"Total Users", "onART Users", "New Users Today"};
         int[] values = {1500, 1200, 45};
         Utils.prettyPrintWith("yellow", "          +--------------------------------------------------+", true);
         Utils.prettyPrintWith("yellow", "          |      Hello 👋 " + getUsername() + ", Welcome Back!       |", true);

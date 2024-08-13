@@ -163,13 +163,13 @@ public class BisokeLPT {
             System.out.println("Authentication failed.");
             return null;
         }
-
+        //Utils.prettyPrintWith("yellow", userInfo, true);
         // Split the user info into fields and get each string individually
         String[] fields = userInfo.split(", ");
 
         // Here we Extract user role from the fields
         String role = fields[5];
-        System.out.println("Role: " + role);
+        //System.out.println("Role: " + role);
 
         if ("admin".equalsIgnoreCase(role)) {
             return new Admin(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
@@ -384,7 +384,12 @@ public class BisokeLPT {
 
     private static void handleDataExport() {
         try {
-            final String path = Paths.get(System.getProperty("user.dir"), "scripts/csv_exporter.sh").toString();
+            // Get filename from user
+            System.out.print("-- What should be the name of the file containing the data? >_ ");
+            Scanner scanner = new Scanner(System.in);
+            String filename = scanner.nextLine();
+
+            final String path = Paths.get(System.getProperty("user.dir"), "scripts/csv_exporter.sh" + " " + filename).toString();
             runProcess(path);
             System.out.println("Data saved in Downloads Directory ✅");
         } catch (Exception e) {
@@ -412,21 +417,21 @@ public class BisokeLPT {
 
     private static void handleAdminChoice(int choice, Admin admin) {
         switch (choice) {
-            case 1:
+            case 1 ->
                 initiateRegistration();
-                break;
-            case 2:
+            case 2 -> {
                 handleDataExport();
-                break;
-            case 3:
+                Utils.pauseSystem("\n Press Enter key to continue...");
+
+            }
+            case 3 ->
                 System.out.println("Exporting analytics data...");
-                break;
-            case 4:
+            case 4 ->
                 admin.logout();
-                break;
-            default:
+            default ->
                 System.out.println("Invalid option.");
         }
+
     }
 
     private static void handlePatientChoice(int choice, Patient patient) {

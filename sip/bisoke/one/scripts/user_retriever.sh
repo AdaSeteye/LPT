@@ -49,5 +49,7 @@ fi
 EMAIL="$1"
 PASSWORD="$2"
 
+#echo "Received arguments: Email=$EMAIL, Password=$PASSWORD"
+
 # Call the function to search for the email and verify the password
 search_email_and_verify_password "$EMAIL" "$PASSWORD"

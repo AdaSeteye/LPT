@@ -34,9 +34,9 @@ hash_password "$password"
 new_details="${uuid}, ${fname}, ${lname}, ${email}, ${hashed_password}, ${role}, ${ybirth}, ${HIVStatus}, ${Diagnosisyear}, ${ARTStatus}, ${ARTyear}, ${country}"
 
 # Update the file with new details
-if grep -q "^${uuid}, ${email}" "$file_path"; then
+if grep -q "^${uuid}" "$file_path"; then
     # Remove the old line and append the new details
-    grep -v "^${uuid}, ${email}" "$file_path" > "${file_path}.tmp"
+    grep -v "^${uuid}" "$file_path" > "${file_path}.tmp"
     echo "${new_details}" >> "${file_path}.tmp"
     mv "${file_path}.tmp" "$file_path"
 else

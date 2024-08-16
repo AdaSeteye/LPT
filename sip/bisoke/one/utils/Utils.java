@@ -210,7 +210,7 @@ public class Utils {
     public static void showSystemHelp() {
 
         System.out.println("\n\033[31m---> What is BisokeLPT\033[0m");
-        System.out.println("Bisoke LPT is a software solution that is designed by BisokeOne members to predict the lifespan of HIV AIDS patients... Blaablaaablaaaba");
+        System.out.println("Bisoke LPT is a software solution that is designed by BisokeOne members to predict the lifespan of HIV AIDS patients... ");
 
         System.out.println("\033[31m---> How it works\033[0m");
         System.out.println("The user should be authenticated to use the system. The system will ask the user to enter their personal information and the system will calculate the lifespan of the user based on the information provided.");

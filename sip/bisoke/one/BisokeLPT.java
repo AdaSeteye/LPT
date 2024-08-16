@@ -21,10 +21,6 @@ public class BisokeLPT {
         while (true) {
             Utils.clearConsole();
             showMainMenu();
-            // try {
-            //     Utils.showLoader(10);
-            // } catch (InterruptedException ex) {
-            // }
             boolean validChoice = false;
 
             while (!validChoice) {
@@ -36,6 +32,7 @@ public class BisokeLPT {
                     case 1 -> {
                         completeRegistration();
                         validChoice = true;
+                        Utils.pauseSystem("Press Enter key to continue...");
                     }
                     case 2 -> {
                         User user = authenticate(scanner);
@@ -104,12 +101,14 @@ public class BisokeLPT {
 
         String checkUser = checkUserwithProcess(path, email, uuid);
 
+        //Utils.pauseSystem("Press Enter key to continue...");
         if (checkUser.contains("not_found")) {
             System.out.println("\n User not found, please register first.\n ");
 
         } else {
             Console console = System.console();
             System.out.println("User with UUID " + uuid + " found! Let's proceed...");
+            Utils.pauseSystem("Press Enter key to continue...");
             System.out.print("-- Please enter your first name >_ ");
             String firstName = scanner.nextLine();
             System.out.print("-- Please enter your last name >_ ");
@@ -162,24 +161,25 @@ public class BisokeLPT {
         if ("not_found".equalsIgnoreCase(userInfo.trim())) {
             System.out.println("Authentication failed.");
             return null;
-        }
-        //Utils.prettyPrintWith("yellow", userInfo, true);
-        // Split the user info into fields and get each string individually
-        String[] fields = userInfo.split(", ");
-
-        // Here we Extract user role from the fields
-        String role = fields[5];
-        //System.out.println("Role: " + role);
-
-        if ("admin".equalsIgnoreCase(role)) {
-            return new Admin(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
-        } else if ("patient".equalsIgnoreCase(role)) {
-            return new Patient(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6],
-                    Boolean.parseBoolean(fields[7]), fields[8],
-                    Boolean.parseBoolean(fields[9]), fields[10], fields[11]);
         } else {
-            System.out.println("Unknown role.");
-            return null;
+            //Utils.prettyPrintWith("yellow", userInfo, true);
+            // Split the user info into fields and get each string individually
+            String[] fields = userInfo.split(", ");
+            System.out.println("Fields " + userInfo.toLowerCase());
+            // Here we Extract user role from the fields
+            String role = fields[5];
+            //System.out.println("Role: " + role);
+
+            if ("admin".equalsIgnoreCase(role)) {
+                return new Admin(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]);
+            } else if ("patient".equalsIgnoreCase(role)) {
+                return new Patient(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6],
+                        Boolean.parseBoolean(fields[7]), fields[8],
+                        Boolean.parseBoolean(fields[9]), fields[10], fields[11]);
+            } else {
+                System.out.println("Unknown role.");
+                return null;
+            }
         }
     }
 
@@ -326,7 +326,7 @@ public class BisokeLPT {
                     "-c",
                     filePath + " " + args
             );
-            System.out.println("COMMAND: " + filePath + " " + args);
+            //System.out.println("COMMAND: " + filePath + " " + args);
             pb.redirectErrorStream(true);
             Process process = pb.start();
 

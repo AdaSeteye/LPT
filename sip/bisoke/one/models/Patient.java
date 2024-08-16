@@ -1,5 +1,6 @@
 package sip.bisoke.one.models;
 
+import java.io.Console;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class Patient extends User {
     public void showMenu() {
         //Utils.clearConsole();
         Utils.prettyPrintWith("green", "          +--------------------------------------------------+", true);
-        Utils.prettyPrintWith("green", "          |      Hello 👋 " + getUsername() + ", Welcome Back!        |", true);
+        Utils.prettyPrintWith("green", "          |      Hello 👋 " + getUsername() + ", Welcome Back!      |", true);
         Utils.prettyPrintWith("green", "          +--------------------------------------------------+", true);
         System.out.println();
         System.out.println("1. 🪪View Profile");
@@ -86,9 +87,9 @@ public class Patient extends User {
         System.out.println(">-Name: " + this.getFirstName() + " " + getLastName());
         System.out.println(">-Email: " + getEmail());
         System.out.println(">-Date of Birth: " + dateOfBirth);
-        System.out.println(">-HIV Positive: " + this.hivStatus);
+        System.out.println(">-HIV Positive: " + (this.hivStatus ? "Yes" : "No"));
         System.out.println(">-Diagnosis Date: " + (diagnosisDate != null ? diagnosisDate : "N/A"));
-        System.out.println(">-On ART: " + this.onART);
+        System.out.println(">-On ART: " + (this.onART == true ? "Yes" : "No"));
         System.out.println(">-ART Start Date: " + (artStartDate != null ? artStartDate : "N/A"));
         System.out.println(">-Country ISO Code: " + countryISOCode);
         //System.out.println(">-Computed Lifespan: 34 Years");
@@ -141,37 +142,83 @@ public class Patient extends User {
     }
 
     public void updateProfile() {
+        Console console = System.console();
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("---- | PROFILE UPDATE | ----");
-            System.out.print("-- Please enter your email >_ ");
-            String email = scanner.nextLine();
 
-            System.out.print("-- Enter new first name >_ ");
-            String firstName = scanner.nextLine();
+            // Existing user data
+            String currentEmail = this.getEmail();
+            String currentFirstName = this.getFirstName();
+            String currentLastName = this.getLastName();
+            String currentPassword = this.getPassword(); // Assuming you have a method to get the hashed password
+            String currentDateOfBirth = this.getDateOfBirth();
+            String currentHIVStatus = hivStatus ? "Yes" : "No";
+            String currentDiagnosisDate = this.getDiagnosisDate();
+            String currentOnART = onART ? "Yes" : "No";
+            String currentCountry = this.getCountryISOCode();
+            String currentARTYear = this.getArtStartDate();
 
-            System.out.print("-- Enter new last name >_ ");
-            String lastName = scanner.nextLine();
+            System.out.print("-- Please enter your email (" + currentEmail + ") >_ ");
+            String email = scanner.nextLine().trim();
+            if (email.isEmpty()) {
+                email = currentEmail;
+            }
 
-            System.out.print("-- Enter new password >_ ");
-            String password = scanner.nextLine();
+            System.out.print("-- Enter new first name (" + currentFirstName + ") >_ ");
+            String firstName = scanner.nextLine().trim();
+            if (firstName.isEmpty()) {
+                firstName = currentFirstName;
+            }
 
-            System.out.print("-- Please enter your date of birth (dd-mm-yyyy) >_ ");
-            String dateOfBirth = scanner.nextLine();
+            System.out.print("-- Enter new last name (" + currentLastName + ") >_ ");
+            String lastName = scanner.nextLine().trim();
+            if (lastName.isEmpty()) {
+                lastName = currentLastName;
+            }
 
-            System.out.print("-- Are you HIV positive? (true/false) >_ ");
-            String HIVStatus = scanner.nextLine();
+            char[] passwordArray = console.readPassword("-- Enter new password (leave blank to keep current) >_ ");
+            String password = new String(passwordArray).trim();
+            if (password.isEmpty()) {
+                password = currentPassword; // Keep the hashed password
+            } else {
+                // Optionally hash the new password here if needed
+            }
 
-            System.out.print("-- Please enter your diagnosis date (dd-mm-yyyy) >_ ");
-            String diagnosisDate = scanner.nextLine();
+            System.out.print("-- Please enter your date of birth (" + currentDateOfBirth + ") >_ ");
+            String dateOfBirth = scanner.nextLine().trim();
+            if (dateOfBirth.isEmpty()) {
+                dateOfBirth = currentDateOfBirth;
+            }
 
-            System.out.print("-- Are you on ART? (true/false) >_ ");
-            String onART = scanner.nextLine();
+            System.out.print("-- Are you HIV positive? (" + currentHIVStatus + ") >_ ");
+            String HIVStatus = scanner.nextLine().trim();
+            if (HIVStatus.isEmpty()) {
+                HIVStatus = currentHIVStatus;
+            }
 
-            System.out.print("-- What is your country ISO? >_ ");
-            String country = scanner.nextLine();
+            System.out.print("-- Please enter your diagnosis date (" + currentDiagnosisDate + ") >_ ");
+            String diagnosisDate = scanner.nextLine().trim();
+            if (diagnosisDate.isEmpty()) {
+                diagnosisDate = currentDiagnosisDate;
+            }
 
-            System.out.print("-- When did you start ART? (dd-mm-yyyy) >_ ");
-            String artYear = scanner.nextLine();
+            System.out.print("-- Are you on ART? (" + currentOnART + ") >_ ");
+            String onART = scanner.nextLine().trim();
+            if (onART.isEmpty()) {
+                onART = currentOnART;
+            }
+
+            System.out.print("-- What is your country ISO? (" + currentCountry + ") >_ ");
+            String country = scanner.nextLine().trim();
+            if (country.isEmpty()) {
+                country = currentCountry;
+            }
+
+            System.out.print("-- When did you start ART? (" + currentARTYear + ") >_ ");
+            String artYear = scanner.nextLine().trim();
+            if (artYear.isEmpty()) {
+                artYear = currentARTYear;
+            }
 
             String result = BisokeLPT.updateUserProfileWithProcess(email, this.getUuid(), password, firstName, lastName, dateOfBirth, country, HIVStatus, diagnosisDate, onART, artYear, this.getRole());
 

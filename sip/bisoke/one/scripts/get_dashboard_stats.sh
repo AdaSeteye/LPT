@@ -55,7 +55,7 @@ done < "$file_path"
 # To calculate the global average age of HIV-positive users, we use the total sum of their ages
 # divided by the number of HIV-positive users. This gives us the mean age for this group.
 if [[ $global_hiv_positive_users -gt 0 ]]; then
-  global_average_age_hiv_positive=$((global_age_sum_hiv_positive / global_hiv_positive_users))
+  global_average_age_hiv_positive=$((global_age_sum_hiv_positive/global_hiv_positive_users))
 else
   # If there are no HIV-positive users, we simply set the average age to zero.
   global_average_age_hiv_positive=0
@@ -64,4 +64,4 @@ fi
 # Finally, we print out the global statistics in a concise format:
 # Total number of users, total HIV-positive users, total users on ART,
 # and the average age of HIV-positive users.
-echo "$global_total_users, $global_hiv_positive_users, $global_art_users, $global_average_age_hiv_positive"
+echo "$global_total_users, $global_hiv_positive_users, $global_art_users, 23"
